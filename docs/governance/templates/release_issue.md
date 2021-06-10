@@ -18,7 +18,7 @@ and copy it into a release issue. Fill in relevant values, found inside {}
 ## Steps
 
 - [ ] Run `make shell` and run `gcloud config configurations activate agones-images`.
-- [ ] Review [closed issues with no milestone](https://github.com/googleforgames/agones/issues?q=is%3Aissue+is%3Aclosed+no%3Amilestone) and add relevant ones tothe current milestone.
+- [ ] Review [closed issues with no milestone](https://github.com/googleforgames/agones/issues?q=is%3Aissue+is%3Aclosed+no%3Amilestone) and add relevant ones to the current milestone.
   - Issues tagged as `invalid`, `duplicate`, `question`, or `wontfix` can be ignored
 - [ ] Review closed issues in the current milestone to ensure that they have appropriate tags.
 - [ ] Review [merged PRs that have no milestone](https://github.com/googleforgames/agones/pulls?q=is%3Apr+is%3Amerged+no%3Amilestone+) and add them to the current milestone.
@@ -35,7 +35,7 @@ and copy it into a release issue. Fill in relevant values, found inside {}
 - [ ] Ensure the [helm `tag` value][values] is correct (should be {version} if a full release, {version}-rc if release candidate)
 - [ ] Ensure the [helm `Chart` version values][chart] are correct (should be {version} if a full release, {version}-rc if release candidate)
 - [ ] Update SDK Package Versions
-    - [ ] Ensure the [`sdks/nodejs/package.json`][nodejs] version is correct (should be {version} if a full release, {version}-rc if release candidate)
+    - [ ] Update the package version in [`sdks/nodejs/package.json`][package.json] and [`sdks/nodejs/package-lock.json`][package-lock.json] by running `npm version {version}` if a full release or `npm version {version}-rc` if release candidate
     - [ ] Ensure the [`sdks/csharp/sdk/AgonesSDK.nuspec` and `sdks/csharp/sdk/csharp-sdk.csproj`][csharp] versions are correct (should be {version} if a full release, {version}-rc if release candidate)
 - [ ] Run `make gen-install`
 - [ ] Run `make test-examples-on-gcr` to ensure all example images exist on gcr.io/agones-images-
@@ -67,8 +67,7 @@ and copy it into a release issue. Fill in relevant values, found inside {}
 - [ ] Do a `helm repo add agones https://agones.dev/chart/stable` / `helm repo update` and verify that the new
  version is available via the command `helm search repo agones --versions --devel`.
 - [ ] Do a `helm install --namespace=agones-system agones agones/agones` 
-    (`helm install --namespace=agones-system agones agones/agones --version={version}-rc` if release candidate) and a smoke
-     test to confirm everything is working.
+    (`helm install --namespace=agones-system agones agones/agones --version={version}-rc` if release candidate) and a smoke test to confirm everything is working.
 - [ ] Attach all assets found in the `release` folder to the draft Github Release.
 - [ ] Publish the draft Github Release.
 - [ ] Send an email to the [mailing list][list] with the release details (copy-paste the release blog post)
@@ -78,8 +77,8 @@ and copy it into a release issue. Fill in relevant values, found inside {}
 - [ ] If full release, then increment the `base_version` in [`build/Makefile`][build-makefile]
 - [ ] If full release move [helm `tag` value][values] is set to {version}+1-dev
 - [ ] If full release move the [helm `Chart` version values][chart] is to {version}+1-dev
-- [ ] If full release move the [`sdks/nodejs/package.json`][nodejs] to {version}+1-dev
-- [ ] If full release move the [`sdks/csharp/AgonesSDK.nuspec` and `sdks/csharp/csharp-sdk.csproj`][csharp] to {version}+1-dev
+- [ ] If full release, change to the `sdks/nodejs` directory and run the command `npm version {version}+1-dev` to update the package version
+- [ ] If full release move the [`sdks/csharp/sdk/AgonesSDK.nuspec` and `sdks/csharp/sdk/csharp-sdk.csproj`][csharp] to {version}+1-dev
 - [ ] If full release, remove `feature-freeze-do-not-merge` labels from all pull requests
 - [ ] Run `make gen-install gen-api-docs`
 - [ ] Create PR with these changes, and merge them with approval
@@ -91,5 +90,6 @@ and copy it into a release issue. Fill in relevant values, found inside {}
 [list]: https://groups.google.com/forum/#!forum/agones-discuss
 [release-template]: https://github.com/googleforgames/agones/blob/main/docs/governance/templates/release.md
 [build-makefile]: https://github.com/googleforgames/agones/blob/main/build/Makefile
-[nodejs]: https://github.com/googleforgames/agones/blob/main/sdks/nodejs/package.json
+[package.json]: https://github.com/googleforgames/agones/blob/main/sdks/nodejs/package.json
+[package-lock.json]: https://github.com/googleforgames/agones/blob/main/sdks/nodejs/package-lock.json
 [csharp]: https://github.com/googleforgames/agones/blob/main/sdks/csharp/sdk/
